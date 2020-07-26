@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Home></Home>
+    <Login />
   </div>
 </template>
 
 <script>
-import Home from "@/components/Home/index";
+import Login from "@/components/login/index";
 export default {
   components: {
-    Home
+    Login
   }
 };
 </script>

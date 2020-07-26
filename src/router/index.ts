@@ -1,23 +1,35 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
-
+import { Message } from "element-ui";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "home",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Home.vue"),
+    beforeEnter: (to, from, next) => {
+      if (to.path === "/" && !sessionStorage.getItem("token")) {
+        Message("无登录信息,前去登录");
+        setTimeout(() => {
+          next({ path: "/login" });
+        }, 1000);
+      } else {
+        next();
+      }
+    }
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: "/login",
+    name: "Login",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+      import(/* webpackChunkName: "about" */ "../views/Login.vue")
+  },
+  {
+    path: "*",
+    name: "error",
+    component: () => import("./../views/Notfound.vue")
   }
 ];
 
